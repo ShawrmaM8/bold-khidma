@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Mail, Share2, FileText, Clock, Zap } from "lucide-react";
 import { toast } from "sonner";
+import { addToHistory } from "@/utils/history";
 
 interface ActionCardProps {
   title: string;
@@ -41,6 +42,12 @@ export const ActionCard = ({
   };
 
   const handleAction = () => {
+    addToHistory({
+      type: 'action',
+      title,
+      community,
+      details: description,
+    });
     toast.success(`${title} action initiated!`);
   };
 

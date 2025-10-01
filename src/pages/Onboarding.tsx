@@ -8,6 +8,7 @@ const Onboarding = () => {
   const navigate = useNavigate();
 
   const handleBeginJourney = () => {
+    localStorage.setItem('ummah_onboarded', 'true');
     navigate("/duas");
   };
 
@@ -34,23 +35,23 @@ const Onboarding = () => {
               Ummah United
             </h1>
             <p className="text-xl text-gradient-gold font-medium">
-              Transform Prayer into Action
+              Level Up Your Good Deeds: Turn Intentions into Impact!
             </p>
           </div>
 
           <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-xl mx-auto">
-            Join a global community turning spiritual practice into tangible impact. 
-            Make duas, support causes, and advocate for communities in need.
+            Join a Global Community: Transform Spiritual Practice into Tangible Impact! 
+            Earn Points for Making Duas, Supporting Causes, and Advocating for Communities in Need.
           </p>
 
           <div className="pt-4 space-y-3">
             <Button
               onClick={handleBeginJourney}
               size="lg"
-              className="w-full md:w-auto px-12 text-base shadow-glow hover:shadow-elevated transition-all duration-300"
+              className="w-full md:w-auto px-12 text-base bg-red-600 hover:bg-red-700 text-white shadow-glow hover:shadow-elevated transition-all duration-300"
             >
-              <Sparkles className="mr-2 h-5 w-5" />
-              Begin Journey
+              <Sparkles className="mr-2 h-5 w-5 text-yellow-400" />
+              Start Today!
             </Button>
             
             <p className="text-xs text-muted-foreground">

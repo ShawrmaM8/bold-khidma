@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Share2, Check } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { addToHistory } from "@/utils/history";
 
 interface DuaCardProps {
   arabic: string;
@@ -26,6 +27,12 @@ export const DuaCard = ({
 
   const handlePrayerConfirmation = () => {
     setPrayed(true);
+    addToHistory({
+      type: 'dua',
+      title: `Dua for ${community}`,
+      community,
+      details: translation,
+    });
     toast.success("Prayer recorded! May it be accepted.");
     setTimeout(() => setPrayed(false), 3000);
   };

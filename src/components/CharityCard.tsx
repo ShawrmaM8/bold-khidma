@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, Heart, TrendingUp } from "lucide-react";
 import { toast } from "sonner";
+import { addToHistory } from "@/utils/history";
 
 interface CharityCardProps {
   name: string;
@@ -22,6 +23,12 @@ export const CharityCard = ({
   image,
 }: CharityCardProps) => {
   const handleDonate = () => {
+    addToHistory({
+      type: 'charity',
+      title: name,
+      community,
+      details: description,
+    });
     toast.success(`Thank you for supporting ${name}!`);
   };
 

@@ -11,16 +11,56 @@ import {
   Settings,
   Flame
 } from "lucide-react";
+import { getHistory } from "@/utils/history";
+import { useState, useEffect } from "react";
 
 const Profile = () => {
+  const [history, setHistory] = useState(getHistory());
+
+  useEffect(() => {
+    // Update history when user returns to profile
+    setHistory(getHistory());
+  }, []);
+
+  const duaCount = history.filter(h => h.type === 'dua').length;
+  const charityCount = history.filter(h => h.type === 'charity').length;
+  const actionCount = history.filter(h => h.type === 'action').length;
+  const uniqueCommunities = new Set(history.map(h => h.community)).size;
+
   const stats = [
-    { label: "Prayers Made", value: "127", icon: Calendar, color: "text-primary" },
-    { label: "Communities Supported", value: "8", icon: Heart, color: "text-red-500" },
-    { label: "Actions Taken", value: "34", icon: Megaphone, color: "text-blue-500" },
-    { label: "Impact Score", value: "892", icon: TrendingUp, color: "text-gold" },
+    { label: "Prayers Made", value: duaCount.toString(), icon: Calendar, color: "text-primary" },
+    { label: "Communities Supported", value: uniqueCommunities.toString(), icon: Heart, color: "text-red-500" },
+    { label: "Actions Taken", value: actionCount.toString(), icon: Megaphone, color: "text-blue-500" },
+    { label: "Impact Score", value: (duaCount + charityCount * 5 + actionCount * 3).toString(), icon: TrendingUp, color: "text-gold" },
   ];
 
-  const streakDays = 15;
+  const streakDays = duaCount > 0 ? Math.min(duaCount, 28) : 0;
+
+  const getIcon = (type: string) => {
+    switch (type) {
+      case 'dua': return Calendar;
+      case 'charity': return Heart;
+      case 'action': return Megaphone;
+      default: return Calendar;
+    }
+  };
+
+  const getIconColor = (type: string) => {
+    switch (type) {
+      case 'dua': return 'text-primary';
+      case 'charity': return 'text-red-500';
+      case 'action': return 'text-blue-500';
+      default: return 'text-primary';
+    }
+  };
+
+  const formatTimeAgo = (timestamp: number) => {
+    const seconds = Math.floor((Date.now() - timestamp) / 1000);
+    if (seconds < 60) return 'Just now';
+    if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
+    if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
+    return `${Math.floor(seconds / 86400)}d ago`;
+  };
 
   return (
     <div className="min-h-screen bg-background pattern-dots pb-24">
@@ -95,37 +135,29 @@ const Profile = () => {
 
         {/* Recent Activity */}
         <Card className="p-6 shadow-soft animate-fade-in-up">
-          <h3 className="text-lg font-semibold mb-4 text-foreground">Recent Impact</h3>
-          <div className="space-y-4">
-            <div className="flex items-start gap-3 pb-3 border-b border-border">
-              <div className="p-2 bg-primary/10 rounded-lg">
-                <Calendar className="h-4 w-4 text-primary" />
-              </div>
-              <div className="flex-1">
-                <p className="text-sm font-medium text-foreground">Made dua for Palestine</p>
-                <p className="text-xs text-muted-foreground">2 hours ago</p>
-              </div>
-            </div>
-            
-            <div className="flex items-start gap-3 pb-3 border-b border-border">
-              <div className="p-2 bg-red-500/10 rounded-lg">
-                <Heart className="h-4 w-4 text-red-500" />
-              </div>
-              <div className="flex-1">
-                <p className="text-sm font-medium text-foreground">Donated to Syria Emergency Response</p>
-                <p className="text-xs text-muted-foreground">1 day ago</p>
-              </div>
-            </div>
-            
-            <div className="flex items-start gap-3">
-              <div className="p-2 bg-blue-500/10 rounded-lg">
-                <Megaphone className="h-4 w-4 text-blue-500" />
-              </div>
-              <div className="flex-1">
-                <p className="text-sm font-medium text-foreground">Signed petition for humanitarian aid</p>
-                <p className="text-xs text-muted-foreground">2 days ago</p>
-              </div>
-            </div>
+          <h3 className="text-lg font-semibold mb-4 text-foreground">My History</h3>
+          <div className="space-y-4 max-h-96 overflow-y-auto">
+            {history.length === 0 ? (
+              <p className="text-sm text-muted-foreground text-center py-4">
+                Start making duas, supporting charities, and taking actions to see your impact here!
+              </p>
+            ) : (
+              history.slice(0, 20).map((item) => {
+                const Icon = getIcon(item.type);
+                const iconColor = getIconColor(item.type);
+                return (
+                  <div key={item.id} className="flex items-start gap-3 pb-3 border-b border-border last:border-0">
+                    <div className={`p-2 ${iconColor.replace('text-', 'bg-')}/10 rounded-lg`}>
+                      <Icon className={`h-4 w-4 ${iconColor}`} />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-foreground truncate">{item.title}</p>
+                      <p className="text-xs text-muted-foreground">{formatTimeAgo(item.timestamp)}</p>
+                    </div>
+                  </div>
+                );
+              })
+            )}
           </div>
         </Card>
       </main>
