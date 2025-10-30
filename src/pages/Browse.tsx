@@ -3,8 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Navigation } from "@/components/ui/navigation";
+import { Header } from "@/components/Header";
 import { ChevronLeft, ChevronRight, Plus, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface Action {
   id: string;
@@ -107,19 +109,36 @@ const mockActions: Action[] = [
 ];
 
 const Browse = () => {
+  const { t } = useLanguage();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [filters, setFilters] = useState({
     country: "All",
     causeType: "All"
   });
 
-  const countries = ["All", "Yemen", "Palestine", "Syria", "Afghanistan", "Somalia"];
-  const causeTypes = ["All", "Medical", "Food/Water", "Education", "Clothes", "Orphans"];
+  const countries = [t('browse.allCountries'), "Yemen", "Palestine", "Syria", "Afghanistan", "Somalia"];
+  const causeTypes = [
+    t('browse.allCauses'),
+    t('browse.medical'),
+    t('browse.foodWater'),
+    t('browse.education'),
+    t('browse.clothes'),
+    t('browse.orphans')
+  ];
+
+  const causeTypeMap: Record<string, string> = {
+    [t('browse.medical')]: 'Medical',
+    [t('browse.foodWater')]: 'Food/Water',
+    [t('browse.education')]: 'Education',
+    [t('browse.clothes')]: 'Clothes',
+    [t('browse.orphans')]: 'Orphans'
+  };
 
   // Filter actions based on selected filters
   const filteredActions = mockActions.filter(action => {
-    const matchesCountry = filters.country === "All" || action.country === filters.country;
-    const matchesCause = filters.causeType === "All" || action.causeType === filters.causeType;
+    const matchesCountry = filters.country === t('browse.allCountries') || filters.country === "All" || action.country === filters.country;
+    const matchesCauseRaw = filters.causeType === t('browse.allCauses') || filters.causeType === "All";
+    const matchesCause = matchesCauseRaw || action.causeType === filters.causeType || action.causeType === causeTypeMap[filters.causeType];
     return matchesCountry && matchesCause;
   });
 
@@ -136,20 +155,25 @@ const Browse = () => {
   const handleAddToMyAction = () => {
     // Store active action in localStorage
     localStorage.setItem('boldkhidma_active_action', JSON.stringify(currentAction));
-    toast.success("Action added to MyAction!");
+    toast.success(t('browse.addToMyAction') + "!");
+    
+    // Trigger event to update barakah display
+    window.dispatchEvent(new Event('barakah-updated'));
   };
 
   return (
-    <div className="min-h-screen bg-background pattern-dots pb-24">
-      {/* Header */}
-      <header className="sticky top-0 z-40 bg-card/95 backdrop-blur-sm border-b border-border shadow-soft">
-        <div className="max-w-4xl mx-auto px-4 py-6">
-          <h1 className="text-3xl font-bold text-foreground mb-6">Browse Actions</h1>
-          
-          {/* Filters */}
-          <div className="space-y-4">
-            <div>
-              <p className="text-sm text-muted-foreground mb-2">Country</p>
+    <>
+      <Header />
+      <div className="min-h-screen bg-background pattern-dots pb-24 pt-14">
+        {/* Header */}
+        <header className="sticky top-14 z-40 bg-card/95 backdrop-blur-sm border-b border-border shadow-soft">
+          <div className="max-w-4xl mx-auto px-4 py-6">
+            <h1 className="text-3xl font-bold text-foreground mb-6">{t('browse.title')}</h1>
+            
+            {/* Filters */}
+            <div className="space-y-4">
+              <div>
+                <p className="text-sm text-muted-foreground mb-2">{t('browse.filterCountry')}</p>
               <div className="flex flex-wrap gap-2">
                 {countries.map((country) => (
                   <Badge
@@ -166,9 +190,9 @@ const Browse = () => {
                 ))}
               </div>
             </div>
-            
-            <div>
-              <p className="text-sm text-muted-foreground mb-2">Cause Type</p>
+              
+              <div>
+                <p className="text-sm text-muted-foreground mb-2">{t('browse.filterCause')}</p>
               <div className="flex flex-wrap gap-2">
                 {causeTypes.map((type) => (
                   <Badge
@@ -213,9 +237,9 @@ const Browse = () => {
             </ol>
           </div>
 
-          {/* Impact Metrics */}
-          <div className="bg-cream/50 rounded-lg p-4 space-y-2">
-            <h3 className="font-semibold text-foreground text-sm">Estimated Impact:</h3>
+            {/* Impact Metrics */}
+            <div className="bg-cream/50 rounded-lg p-4 space-y-2">
+              <h3 className="font-semibold text-foreground text-sm">{t('browse.impact')}:</h3>
             <div className="flex gap-6 text-sm">
               <div>
                 <span className="text-muted-foreground">People Helped: </span>
@@ -228,29 +252,28 @@ const Browse = () => {
             </div>
           </div>
 
-          {/* Optional GoFundMe */}
-          {currentAction.goFundMeUrl && (
-            <div className="pt-2">
-              <Button
-                variant="outline"
-                className="w-full"
-                onClick={() => window.open(currentAction.goFundMeUrl, '_blank')}
-              >
-                <ExternalLink className="w-4 h-4 mr-2" />
-                Donate via GoFundMe
-              </Button>
-            </div>
-          )}
+            {currentAction.goFundMeUrl && (
+              <div className="pt-2">
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => window.open(currentAction.goFundMeUrl, '_blank')}
+                >
+                  <ExternalLink className="w-4 h-4 mr-2" />
+                  {t('browse.donate')}
+                </Button>
+              </div>
+            )}
 
-          {/* Add to MyAction */}
-          <Button
-            onClick={handleAddToMyAction}
-            className="w-full bg-gold hover:bg-gold/90"
-            size="lg"
-          >
-            <Plus className="w-5 h-5 mr-2" />
-            Add to MyAction
-          </Button>
+            {/* Add to MyAction */}
+            <Button
+              onClick={handleAddToMyAction}
+              className="w-full bg-gold hover:bg-gold/90"
+              size="lg"
+            >
+              <Plus className="w-5 h-5 mr-2" />
+              {t('browse.addToMyAction')}
+            </Button>
 
           {/* Navigation */}
           <div className="flex justify-between items-center pt-4 border-t">
@@ -274,11 +297,12 @@ const Browse = () => {
               <ChevronRight className="w-5 h-5 ml-1" />
             </Button>
           </div>
-        </Card>
-      </main>
+          </Card>
+        </main>
 
-      <Navigation />
-    </div>
+        <Navigation />
+      </div>
+    </>
   );
 };
 

@@ -1,17 +1,23 @@
 import { Navigation } from "@/components/ui/navigation";
+import { Header } from "@/components/Header";
 import { Card } from "@/components/ui/card";
 import { Heart, Zap, BookOpen } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const About = () => {
+  const { t } = useLanguage();
+  
   return (
-    <div className="min-h-screen bg-background pattern-dots pb-24">
-      {/* Header */}
-      <header className="sticky top-0 z-40 bg-card/95 backdrop-blur-sm border-b border-border shadow-soft">
-        <div className="max-w-4xl mx-auto px-4 py-6">
-          <h1 className="text-3xl font-bold text-foreground">About BoldKhidma</h1>
-          <p className="text-muted-foreground mt-2">One action at a time, we build impact together</p>
-        </div>
-      </header>
+    <>
+      <Header />
+      <div className="min-h-screen bg-background pattern-dots pb-24 pt-14">
+        {/* Header */}
+        <header className="sticky top-14 z-40 bg-card/95 backdrop-blur-sm border-b border-border shadow-soft">
+          <div className="max-w-4xl mx-auto px-4 py-6">
+            <h1 className="text-3xl font-bold text-foreground">{t('about.title')}</h1>
+            <p className="text-muted-foreground mt-2">{t('about.missionDesc')}</p>
+          </div>
+        </header>
 
       <main className="max-w-3xl mx-auto px-4 py-12 space-y-12">
         {/* Mission Statement */}
@@ -112,6 +118,7 @@ const About = () => {
 
       <Navigation />
     </div>
+  </>
   );
 };
 

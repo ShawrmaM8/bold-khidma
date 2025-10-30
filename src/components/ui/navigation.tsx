@@ -1,14 +1,17 @@
 import { NavLink } from "react-router-dom";
 import { Home, Search, CheckSquare, Info, MessageCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export const Navigation = () => {
+  const { t } = useLanguage();
+  
   const navItems = [
-    { to: "/home", icon: Home, label: "Home" },
-    { to: "/browse", icon: Search, label: "Browse" },
-    { to: "/myaction", icon: CheckSquare, label: "MyAction" },
-    { to: "/about", icon: Info, label: "About" },
-    { to: "/support", icon: MessageCircle, label: "Support" },
+    { to: "/home", icon: Home, label: t('nav.home') },
+    { to: "/browse", icon: Search, label: t('nav.browse') },
+    { to: "/myaction", icon: CheckSquare, label: t('nav.myaction') },
+    { to: "/about", icon: Info, label: t('nav.about') },
+    { to: "/support", icon: MessageCircle, label: t('nav.support') },
   ];
 
   return (
