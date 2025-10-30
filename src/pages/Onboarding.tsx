@@ -8,8 +8,8 @@ const Onboarding = () => {
   const navigate = useNavigate();
 
   const handleBeginJourney = () => {
-    localStorage.setItem('ummah_onboarded', 'true');
-    navigate("/duas");
+    localStorage.setItem('boldkhidma_onboarded', 'true');
+    navigate("/home");
   };
 
   return (
@@ -32,30 +32,30 @@ const Onboarding = () => {
         <div className="p-8 md:p-12 space-y-6 text-center">
           <div className="space-y-3">
             <h1 className="text-4xl md:text-5xl font-bold text-foreground">
-              Ummah United
+              BoldKhidma
             </h1>
             <p className="text-xl text-gradient-gold font-medium">
-              Level Up Your Good Deeds: Turn Intentions into Impact!
+              The future of Khidma begins with one act
             </p>
           </div>
 
           <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-xl mx-auto">
-            Join a Global Community: Transform Spiritual Practice into Tangible Impact! 
-            Earn Points for Making Duas, Supporting Causes, and Advocating for Communities in Need.
+            Focus on one meaningful action. Complete it fully. Feel the barakah. 
+            Join a community building real impact through disciplined service.
           </p>
 
           <div className="pt-4 space-y-3">
             <Button
               onClick={handleBeginJourney}
               size="lg"
-              className="w-full md:w-auto px-12 text-base bg-red-600 hover:bg-red-700 text-white shadow-glow hover:shadow-elevated transition-all duration-300"
+              className="w-full md:w-auto px-12 text-base bg-gold hover:bg-gold/90 shadow-glow hover:shadow-elevated transition-all duration-300"
             >
-              <Sparkles className="mr-2 h-5 w-5 text-yellow-400" />
-              Start Today!
+              <Sparkles className="mr-2 h-5 w-5" />
+              Begin Your Journey
             </Button>
             
             <p className="text-xs text-muted-foreground">
-              Prayer reminders • Community impact • Verified charities
+              One action • Full focus • Real impact
             </p>
           </div>
         </div>

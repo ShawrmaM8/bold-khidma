@@ -36,6 +36,9 @@ export default {
           DEFAULT: "hsl(var(--cream))",
           foreground: "hsl(var(--cream-foreground))",
         },
+        barakah: {
+          DEFAULT: "hsl(var(--barakah))",
+        },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",

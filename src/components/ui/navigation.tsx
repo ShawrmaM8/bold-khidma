@@ -1,14 +1,14 @@
 import { NavLink } from "react-router-dom";
-import { Home, Heart, Megaphone, User, Info } from "lucide-react";
+import { Home, Search, CheckSquare, Info, MessageCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export const Navigation = () => {
   const navItems = [
-    { to: "/duas", icon: Home, label: "Duas" },
-    { to: "/charity", icon: Heart, label: "Charity" },
-    { to: "/actions", icon: Megaphone, label: "Actions" },
+    { to: "/home", icon: Home, label: "Home" },
+    { to: "/browse", icon: Search, label: "Browse" },
+    { to: "/myaction", icon: CheckSquare, label: "MyAction" },
     { to: "/about", icon: Info, label: "About" },
-    { to: "/profile", icon: User, label: "Profile" },
+    { to: "/support", icon: MessageCircle, label: "Support" },
   ];
 
   return (
